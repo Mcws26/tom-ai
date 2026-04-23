@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Unlocked — Tom's Mailing List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg-elev: #12121a;
+    --bg-card: #16161f;
+    --border: #23232e;
+    --text: #e8e8ee;
+    --text-dim: #8a8a99;
+    --accent: #7c5cff;
+    --accent-2: #00e5ff;
+    --glow: rgba(124, 92, 255, 0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: hidden; }
+  .lenis.lenis-scrolling iframe { pointer-events: none; }
+  body {
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 10%, rgba(124, 92, 255, 0.18), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 85% 30%, rgba(0, 229, 255, 0.12), transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 90%, rgba(255, 0, 153, 0.08), transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+    transition: opacity 2.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(to bottom, #7c5cff 0%, #14CEF0 100%);
+    opacity: 0;
+    z-index: -1;
+    pointer-events: none;
+    transition: opacity 2.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  body.light-mode::after  { opacity: 1; }
+  body.light-mode::before { opacity: 0; }
+  body.light-mode nav {
+    background: rgba(20, 206, 240, 0.55);
+    border-bottom-color: rgba(10, 10, 15, 0.08);
+  }
+  body.light-mode .logo,
+  body.light-mode .nav-link { color: #0a2a33; }
+  body.light-mode .nav-link:hover { color: #000; }
+  body.light-mode footer {
+    color: #0a2a33;
+    border-top-color: rgba(10, 10, 15, 0.12);
+  }
+  nav, .logo, .nav-link, footer {
+    transition: background-color 2.2s cubic-bezier(0.4, 0, 0.2, 1),
+                color 2.2s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 2.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(20px);
+    background: rgba(10, 10, 15, 0.7);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--accent); }
+  .nav-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-link:hover { color: var(--text); }
+
+  .hero {
+    padding: 120px 32px 100px;
+    text-align: center;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-bottom: 28px;
+    background: var(--bg-elev);
+  }
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent-2);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent-2);
+  }
+  h1 {
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    color: #ffffff;
+  }
+  h1 .letter { color: #ffffff; }
+  h1 .letter .gradient { color: inherit; }
+  h1 .gradient {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero p {
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    color: var(--text-dim);
+    max-width: 640px;
+    margin: 0 auto 40px;
+  }
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent) 0%, #5e3eff 100%);
+    color: white;
+    box-shadow: 0 8px 32px var(--glow);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px var(--glow);
+  }
+  .btn-ghost {
+    background: var(--bg-elev);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--accent); }
+
+  section { padding: 80px 32px; max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    text-align: center;
+    margin-bottom: 60px;
+    line-height: 1.1;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  /* === Pinned benefits section === */
+  .benefits-sec {
+    position: relative;
+    padding: 0 32px;
+    max-width: 1500px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+  .benefits-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .benefits-pin .section-label { margin-bottom: 16px; }
+  .benefits-pin h2 {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    margin-bottom: 0;
+    line-height: 1;
+    color: #ffffff;
+  }
+  .benefits-flow {
+    position: relative;
+    margin-top: -100vh;
+    padding: 50vh 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32vh;
+    z-index: 2;
+  }
+  .card-wrap {
+    width: min(380px, 85%);
+    will-change: transform, opacity;
+  }
+  .card-wrap.side-left  { align-self: flex-start; }
+  .card-wrap.side-right { align-self: flex-end; }
+
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translate(-60px, 120px) rotate(0deg); }
+    to   { opacity: 1; transform: translate(0, 0) rotate(-7deg); }
+  }
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translate(60px, 120px) rotate(0deg); }
+    to   { opacity: 1; transform: translate(0, 0) rotate(7deg); }
+  }
+  @supports (animation-timeline: view()) {
+    .card-wrap {
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+      animation-timeline: view();
+      animation-range: entry 0% cover 45%;
+    }
+    .card-wrap.side-left  { animation-name: slideInLeft; }
+    .card-wrap.side-right { animation-name: slideInRight; }
+  }
+  @supports not (animation-timeline: view()) {
+    .card-wrap.side-left  { transform: rotate(-7deg); }
+    .card-wrap.side-right { transform: rotate(7deg); }
+  }
+
+  @media (max-width: 768px) {
+    .benefits-flow { gap: 18vh; padding: 35vh 0; }
+    .benefits-pin h2 { font-size: 2.2rem; }
+    .card-wrap.side-left,
+    .card-wrap.side-right { align-self: center; }
+  }
+
+  /* === Per-letter title entrance (code-inspired) === */
+  .split { white-space: normal; }
+  .letter {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.4em);
+    filter: blur(6px);
+    will-change: opacity, transform, filter, text-shadow;
+  }
+  .letter.space { width: 0.28em; }
+  .split.in-view .letter {
+    animation: codeType 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--i, 0) * 0.032s);
+  }
+  @keyframes codeType {
+    0%   { opacity: 0; transform: translateY(0.4em); filter: blur(6px); text-shadow: 0 0 0 transparent; }
+    55%  { opacity: 1; transform: translateY(-0.05em); filter: blur(0);
+           text-shadow: 0 0 8px #00e5ff, 0 0 18px rgba(0, 229, 255, 0.55); color: #00e5ff; }
+    100% { opacity: 1; transform: translateY(0); filter: blur(0); text-shadow: none; }
+  }
+  .benefits-pin h2 .letter { color: #ffffff; }
+
+  /* Number sits next to the caret, aligned with the top of the text */
+  /* Keep the original `_` caret, just stretch it a bit to the right */
+  .benefits-pin h2.split::after {
+    display: inline-block;
+    transform: translateY(-0.1em) scaleX(1.35);
+    transform-origin: left center;
+  }
+  /* scroll-num is a zero-size anchor at end of "attention" so the caret lands immediately after the word;
+     its children are absolutely positioned to hover on top of the caret, aligned with the top of the "n". */
+  .benefits-pin h2 .scroll-num {
+    display: inline-block;
+    position: relative;
+    width: 0;
+    height: 0;
+    vertical-align: baseline;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5em;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: #ffffff;
+    text-shadow: 0 0 22px rgba(255, 255, 255, 0.55);
+    -webkit-text-fill-color: #ffffff;
+    overflow: visible;
+  }
+  .benefits-pin h2 .scroll-num > span {
+    position: absolute;
+    left: 0.9em;
+    top: calc(-1em - 10px);
+    white-space: nowrap;
+    color: #ffffff;
+    opacity: 0;
+    transform: translate(-50%, 0.7em) scale(0.85);
+    filter: blur(8px);
+    transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform, filter;
+  }
+  .benefits-pin h2 .scroll-num > span.active {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+    filter: blur(0);
+  }
+  .benefits-pin h2 .scroll-num > span.past {
+    opacity: 0;
+    transform: translate(-50%, -0.7em) scale(0.85);
+    filter: blur(8px);
+  }
+  /* Cursor caret after each title (coding flavor) */
+  .split::after {
+    content: '_';
+    display: inline-block;
+    color: var(--accent-2);
+    margin-left: 0.08em;
+    font-weight: 400;
+    opacity: 0;
+    animation: caretBlink 1s steps(2) infinite;
+    transform: translateY(-0.1em);
+  }
+  .split.in-view::after {
+    animation: caretIn 0.4s 0.8s forwards, caretBlink 1s 1.2s steps(2) infinite;
+  }
+  @keyframes caretIn  { to { opacity: 1; } }
+  @keyframes caretBlink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .letter { opacity: 1 !important; transform: none !important; filter: none !important; animation: none !important; text-shadow: none !important; }
+    .split::after { display: none; }
+  }
+
+  /* === Code background in signup section === */
+  #signup {
+    position: relative;
+    overflow: hidden;
+    max-width: none;
+    padding: 280px 50px 80px;
+  }
+  .code-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: rgba(255, 255, 255, 1);
+    padding: 80px 50px;
+    z-index: 0;
+    overflow: hidden;
+    -webkit-mask-image: radial-gradient(circle 75px at var(--cursor-x, -400px) var(--cursor-y, -400px),
+      rgba(0,0,0,1) 0,
+      rgba(0,0,0,1) 74px,
+      rgba(0,0,0,0.08) 76px);
+            mask-image: radial-gradient(circle 75px at var(--cursor-x, -400px) var(--cursor-y, -400px),
+      rgba(0,0,0,1) 0,
+      rgba(0,0,0,1) 74px,
+      rgba(0,0,0,0.08) 76px);
+    transition: opacity 1s ease;
+  }
+  body.light-mode .code-bg { color: rgba(10, 20, 40, 1); }
+  .code-line {
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+    border-right: 1px solid transparent;
+    animation: typeLine 6s steps(60) infinite;
+    animation-delay: calc(var(--l, 0) * 0.7s);
+  }
+  .code-line .kw  { color: rgba(124, 92, 255, 1); }
+  .code-line .str { color: rgba(0, 229, 255, 1); }
+  .code-line .cm  { color: rgba(255, 255, 255, 0.55); font-style: italic; }
+  .code-line .sep { color: rgba(255, 255, 255, 0.35); }
+  body.light-mode .code-line .kw  { color: rgba(60, 30, 140, 1); }
+  body.light-mode .code-line .str { color: rgba(0, 90, 140, 1); }
+  body.light-mode .code-line .cm  { color: rgba(10, 20, 40, 0.6); }
+  body.light-mode .code-line .sep { color: rgba(10, 20, 40, 0.4); }
+  body.light-mode .code-line .kw  { color: rgba(40, 20, 80, 0.6); }
+  body.light-mode .code-line .str { color: rgba(0, 80, 120, 0.6); }
+  body.light-mode .code-line .cm  { color: rgba(10, 20, 40, 0.35); }
+  @keyframes typeLine {
+    0%   { width: 0; }
+    35%  { width: 100%; border-right-color: var(--accent-2); }
+    75%  { width: 100%; border-right-color: var(--accent-2); }
+    100% { width: 0;    border-right-color: transparent; }
+  }
+  .signup-wrap { position: relative; z-index: 2; }
+
+  /* === Custom cursor (30px black circle) === */
+  .cursor-dot {
+    position: fixed;
+    top: 0; left: 0;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #000;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate3d(calc(var(--cursor-vx, -100px) - 50%), calc(var(--cursor-vy, -100px) - 50%), 0);
+    transition: width 0.2s ease, height 0.2s ease, background 0.4s ease;
+    mix-blend-mode: difference;
+  }
+  @media (hover: none) { .cursor-dot { display: none; } }
+
+  .card {
+    position: relative;
+    padding: 32px;
+    min-height: 210px;
+    transition: transform 0.3s;
+  }
+  .card:hover { transform: translateY(-3px); }
+  .card-fx {
+    position: absolute;
+    inset: -28px;
+    filter: url(#goo);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .card-ring {
+    position: absolute;
+    inset: 22px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    border-radius: 20px;
+  }
+  .card-shape {
+    position: absolute;
+    inset: 28px;
+    background: var(--bg-card);
+    border-radius: 16px;
+  }
+  .card-blob-ring {
+    position: absolute;
+    width: 92px;
+    height: 92px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    border-radius: 50%;
+    left: var(--mx-px, -400px);
+    top: var(--my-px, -400px);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .card-blob {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: var(--bg-card);
+    border-radius: 50%;
+    left: var(--mx-px, -400px);
+    top: var(--my-px, -400px);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .card:hover .card-blob-ring,
+  .card:hover .card-blob { transform: translate(-50%, -50%) scale(1); }
+  .card-body {
+    position: relative;
+    z-index: 1;
+  }
+  .card-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: radial-gradient(circle 200px at var(--mx-card, 50%) var(--my-card, 50%),
+      rgba(124, 92, 255, 0.28), rgba(0, 229, 255, 0.08) 40%, transparent 65%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 0;
+    mix-blend-mode: screen;
+  }
+  .card:hover .card-glow { opacity: 1; }
+  .card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    display: block;
+  }
+  .card h3 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .card p { color: var(--text-dim); font-size: 0.95rem; }
+
+  .signup-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 40px;
+    background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-elev) 100%);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .signup-wrap::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: conic-gradient(from 0deg, transparent, var(--accent), transparent, var(--accent-2), transparent);
+    opacity: 0.15;
+    animation: spin 12s linear infinite;
+    z-index: 0;
+  }
+  .signup-wrap > * { position: relative; z-index: 1; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .signup-inner {
+    background: var(--bg-card);
+    margin: 2px;
+    padding: 50px 30px;
+    border-radius: 22px;
+  }
+  .signup-wrap h2 { margin-bottom: 14px; }
+  .signup-wrap > .signup-inner > p {
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    font-size: 1.05rem;
+  }
+  form {
+    display: flex;
+    gap: 10px;
+    max-width: 480px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  input[type="email"] {
+    flex: 1;
+    min-width: 220px;
+    padding: 14px 18px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type="email"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.15); }
+  input[type="email"]::placeholder { color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+
+  footer {
+    text-align: center;
+    padding: 40px 32px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+  }
+</style>
+</head>
+<body>
+  <nav>
+    <div class="logo">tom<span>.</span>ai</div>
+    <a href="#signup" class="nav-link">→ subscribe</a>
+  </nav>
+
+  <header class="hero">
+    <div class="badge">weekly AI tips, delivered</div>
+    <h1>The future is <span class="gradient">intelligent</span>.<br>Are you ready?</h1>
+    <p>AI is rewriting the rules of work, creativity, and productivity. Learn how to harness it — one practical tip at a time.</p>
+    <div class="cta-row">
+      <a href="#signup" class="btn btn-primary">Join the list →</a>
+      <a href="#benefits" class="btn btn-ghost">Explore benefits</a>
+    </div>
+  </header>
+
+  <section id="benefits" class="benefits-sec">
+    <div class="benefits-pin">
+      <div class="section-label">// why it matters</div>
+      <h2>Six reasons to<br>pay attention<span class="scroll-num" aria-hidden="true"><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span></span></h2>
+    </div>
+    <div class="benefits-flow">
+      <div class="card-wrap side-left"><div class="card"><div class="card-fx"><div class="card-ring"></div><div class="card-shape"></div><div class="card-blob-ring"></div><div class="card-blob"></div></div><div class="card-glow"></div><div class="card-body"><span class="card-num">01</span><h3>Reclaim your time</h3><p>Automate the repetitive. Delegate the tedious. Spend hours on what actually moves the needle.</p></div></div></div>
+      <div class="card-wrap side-right"><div class="card"><div class="card-fx"><div class="card-ring"></div><div class="card-shape"></div><div class="card-blob-ring"></div><div class="card-blob"></div></div><div class="card-glow"></div><div class="card-body"><span class="card-num">02</span><h3>Sharper decisions</h3><p>Surface patterns in data you'd never spot by hand, and make calls backed by real signal.</p></div></div></div>
+      <div class="card-wrap side-left"><div class="card"><div class="card-fx"><div class="card-ring"></div><div class="card-shape"></div><div class="card-blob-ring"></div><div class="card-blob"></div></div><div class="card-glow"></div><div class="card-body"><span class="card-num">03</span><h3>Creative leverage</h3><p>Brainstorm, draft, remix. Use AI as a collaborator that never runs out of ideas.</p></div></div></div>
+      <div class="card-wrap side-right"><div class="card"><div class="card-fx"><div class="card-ring"></div><div class="card-shape"></div><div class="card-blob-ring"></div><div class="card-blob"></div></div><div class="card-glow"></div><div class="card-body"><span class="card-num">04</span><h3>Effortless productivity</h3><p>Emails, summaries, research, code — done in seconds, not hours.</p></div></div></div>
+      <div class="card-wrap side-left"><div class="card"><div class="card-fx"><div class="card-ring"></div><div class="card-shape"></div><div class="card-blob-ring"></div><div class="card-blob"></div></div><div class="card-glow"></div><div class="card-body"><span class="card-num">05</span><h3>Expertise on tap</h3><p>Get instant guidance on anything from design to finance. No gatekeepers required.</p></div></div></div>
+      <div class="card-wrap side-right"><div class="card"><div class="card-fx"><div class="card-ring"></div><div class="card-shape"></div><div class="card-blob-ring"></div><div class="card-blob"></div></div><div class="card-glow"></div><div class="card-body"><span class="card-num">06</span><h3>Scale without limits</h3><p>Solo founder or global team — AI lets you punch far above your weight.</p></div></div></div>
+    </div>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <defs>
+        <filter id="goo">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+          <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -11" result="goo" />
+          <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+        </filter>
+      </defs>
+    </svg>
+  </section>
+
+  <section id="signup">
+    <div class="code-bg" aria-hidden="true">
+      <div class="code-line" style="--l:0"><span class="cm">// tom.ai — weekly signal, zero noise</span></div>
+      <div class="code-line" style="--l:1"><span class="kw">const</span> tom = <span class="kw">new</span> AI({ brain: <span class="str">'curious'</span> });</div>
+      <div class="code-line" style="--l:2"><span class="kw">await</span> tom.subscribe(<span class="str">'you@domain.com'</span>);</div>
+      <div class="code-line" style="--l:3"><span class="kw">while</span> (learning) { tom.share(tips); }</div>
+      <div class="code-line" style="--l:4"><span class="kw">function</span> weekly() { <span class="kw">return</span> insight; }</div>
+      <div class="code-line" style="--l:5"><span class="cm">// no spam · unsubscribe anytime</span></div>
+      <div class="code-line" style="--l:6"><span class="kw">if</span> (you.curious) you.<span class="str">level</span>++;</div>
+      <div class="code-line" style="--l:7"><span class="kw">export default</span> knowledge;</div>
+      <div class="code-line" style="--l:8">tom.on(<span class="str">'question'</span>, (q) => answer(q));</div>
+      <div class="code-line" style="--l:9"><span class="kw">const</span> future = <span class="str">'intelligent'</span>;</div>
+      <div class="code-line" style="--l:10"><span class="cm">/* built for the curious */</span></div>
+      <div class="code-line" style="--l:11">tom.tools.push(<span class="str">'gpt'</span>, <span class="str">'claude'</span>);</div>
+      <div class="code-line" style="--l:12"><span class="kw">return</span> { ready: <span class="kw">true</span> };</div>
+    </div>
+    <div class="signup-wrap">
+      <div class="signup-inner">
+        <div class="section-label">// join tom's list</div>
+        <h2>Weekly AI, in your inbox</h2>
+        <p>Hand-picked tips, tools, and real-world examples. No fluff. No spam. Unsubscribe anytime.</p>
+        <form onsubmit="event.preventDefault(); const b=this.querySelector('button'); b.textContent='✓ You\\'re in'; b.disabled=true;">
+          <input type="email" placeholder="you@domain.com" required />
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 tom.ai · built for the curious
+  </footer>
+
+  <div class="cursor-dot" aria-hidden="true"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script>
+    // Lenis smooth scroll — keeps native scrollY so sticky + scroll-timelines work
+    if (window.Lenis && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        touchMultiplier: 2,
+      });
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      // Make anchor links use Lenis' smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', (e) => {
+          const id = a.getAttribute('href');
+          if (id.length > 1) {
+            const el = document.querySelector(id);
+            if (el) { e.preventDefault(); lenis.scrollTo(el, { offset: 0 }); }
+          }
+        });
+      });
+    }
+
+    // Split big titles into per-letter spans and animate on scroll-in
+    (function splitTitles() {
+      const split = (el) => {
+        if (el.dataset.split) return;
+        el.dataset.split = '1';
+        const letters = [];
+        const walk = (node) => {
+          if (node.nodeType === 3) {
+            const frag = document.createDocumentFragment();
+            for (const ch of node.textContent) {
+              const s = document.createElement('span');
+              s.className = 'letter';
+              if (ch === ' ') {
+                s.classList.add('space');
+                s.innerHTML = '&nbsp;';
+              } else {
+                s.textContent = ch;
+              }
+              frag.appendChild(s);
+              letters.push(s);
+            }
+            node.replaceWith(frag);
+          } else if (node.nodeType === 1) {
+            if (node.tagName === 'BR') return;
+            if (node.classList && node.classList.contains('scroll-num')) return;
+            if (node.classList && node.classList.contains('gradient')) {
+              const s = document.createElement('span');
+              s.className = 'letter';
+              node.parentNode.insertBefore(s, node);
+              s.appendChild(node);
+              letters.push(s);
+            } else {
+              [...node.childNodes].forEach(walk);
+            }
+          }
+        };
+        [...el.childNodes].forEach(walk);
+        letters.forEach((l, i) => l.style.setProperty('--i', i));
+        el.classList.add('split');
+      };
+
+      const titles = document.querySelectorAll('h1, h2');
+      titles.forEach(split);
+
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('in-view');
+              io.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.15 });
+        titles.forEach(t => io.observe(t));
+      } else {
+        titles.forEach(t => t.classList.add('in-view'));
+      }
+    })();
+
+    // Duplicate code lines to fill the signup section vertically
+    (function fillCodeBg() {
+      const bg = document.querySelector('.code-bg');
+      if (!bg) return;
+      const padLineWidth = (line, targetW) => {
+        if (line.dataset.origHtml === undefined) {
+          line.dataset.origHtml = line.innerHTML;
+        } else {
+          line.innerHTML = line.dataset.origHtml;
+        }
+        const original = line.innerHTML;
+        const sep = '<span class="sep">  ·  </span>';
+        let guard = 0;
+        while (line.scrollWidth < targetW && guard < 40) {
+          line.innerHTML += sep + original;
+          guard++;
+        }
+      };
+      const fill = () => {
+        bg.querySelectorAll('.code-line.clone').forEach(n => n.remove());
+        const originals = [...bg.querySelectorAll('.code-line')];
+        if (!originals.length) return;
+        const lineH = originals[0].getBoundingClientRect().height || 28;
+        const target = bg.clientHeight;
+        let total = originals.length * lineH;
+        let i = 0;
+        while (total < target + lineH * 2) {
+          const src = originals[i % originals.length];
+          const clone = src.cloneNode(true);
+          clone.classList.add('clone');
+          clone.removeAttribute('data-orig-html');
+          clone.style.setProperty('--l', (originals.length + i) % (originals.length + 3));
+          bg.appendChild(clone);
+          total += lineH;
+          i++;
+          if (i > 200) break;
+        }
+        const contentW = bg.clientWidth - 100; // account for 50px padding each side
+        bg.querySelectorAll('.code-line').forEach(l => padLineWidth(l, contentW));
+      };
+      // Defer until layout is settled
+      requestAnimationFrame(() => requestAnimationFrame(fill));
+      let resizeT;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeT);
+        resizeT = setTimeout(fill, 150);
+      });
+    })();
+
+    // Card number indicator synced to the currently-centered card
+    (function scrollNums() {
+      const nums = document.querySelectorAll('.benefits-pin .scroll-num > span');
+      const cards = document.querySelectorAll('#benefits .card-wrap');
+      const section = document.querySelector('#benefits');
+      if (!nums.length || !cards.length || !section) return;
+
+      const setActive = (idx) => {
+        nums.forEach((n, i) => {
+          n.classList.toggle('active', i === idx);
+          n.classList.toggle('past', i < idx);
+        });
+      };
+
+      let ticking = false;
+      const update = () => {
+        ticking = false;
+        const vh = window.innerHeight;
+        const sr = section.getBoundingClientRect();
+        // Only show numbers while the benefits section is visible
+        if (sr.bottom < 0 || sr.top > vh) {
+          setActive(-1);
+          return;
+        }
+        const center = vh / 2;
+        let bestIdx = -1, bestDist = Infinity;
+        cards.forEach((c, i) => {
+          const r = c.getBoundingClientRect();
+          const cc = r.top + r.height / 2;
+          const d = Math.abs(cc - center);
+          if (d < bestDist) { bestDist = d; bestIdx = i; }
+        });
+        // Only light up a number if a card is reasonably near center
+        if (bestDist < vh * 0.45) setActive(bestIdx);
+        else setActive(-1);
+      };
+
+      const onScroll = () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      update();
+    })();
+
+    // Custom cursor + code-bg hole tracking
+    (function cursor() {
+      const dot = document.querySelector('.cursor-dot');
+      const codeBg = document.querySelector('.code-bg');
+      const signup = document.querySelector('#signup');
+      const root = document.documentElement;
+      let vx = -100, vy = -100, cx = vx, cy = vy;
+      let rafId = null;
+
+      const tick = () => {
+        cx += (vx - cx) * 0.22;
+        cy += (vy - cy) * 0.22;
+        root.style.setProperty('--cursor-vx', cx + 'px');
+        root.style.setProperty('--cursor-vy', cy + 'px');
+        if (codeBg && signup) {
+          const r = signup.getBoundingClientRect();
+          codeBg.style.setProperty('--cursor-x', (cx - r.left) + 'px');
+          codeBg.style.setProperty('--cursor-y', (cy - r.top) + 'px');
+        }
+        if (Math.abs(vx - cx) > 0.1 || Math.abs(vy - cy) > 0.1) {
+          rafId = requestAnimationFrame(tick);
+        } else {
+          rafId = null;
+        }
+      };
+
+      window.addEventListener('mousemove', (e) => {
+        vx = e.clientX;
+        vy = e.clientY;
+        if (!rafId) rafId = requestAnimationFrame(tick);
+      });
+      window.addEventListener('mouseleave', () => { vx = -100; vy = -100; if (!rafId) rafId = requestAnimationFrame(tick); });
+    })();
+
+    // Switch to light-blue background when the signup section scrolls in
+    (function bgSwitch() {
+      const signup = document.querySelector('#signup');
+      if (!signup || !('IntersectionObserver' in window)) return;
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          document.body.classList.toggle('light-mode', e.isIntersecting);
+        });
+      }, { threshold: 0, rootMargin: '-25% 0px -25% 0px' });
+      io.observe(signup);
+    })();
+
+    document.querySelectorAll('.card').forEach(c => {
+      c.addEventListener('mousemove', e => {
+        const r = c.getBoundingClientRect();
+        const x = e.clientX - r.left;
+        const y = e.clientY - r.top;
+        // +9px offset because .card-fx has inset:-9px (its origin is 9px up/left of card)
+        c.style.setProperty('--mx-px', (x + 28) + 'px');
+        c.style.setProperty('--my-px', (y + 28) + 'px');
+        c.style.setProperty('--mx-card', x + 'px');
+        c.style.setProperty('--my-card', y + 'px');
+      });
+    });
+  </script>
+</body>
+</html>
